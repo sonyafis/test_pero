@@ -1,15 +1,22 @@
 package com.example.demo;
 
-import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.junit.jupiter.api.*;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import com.codeborne.selenide.Configuration;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
 public class ProductPageTest {
     @BeforeAll
     public static void setUpAll() {
         Configuration.browserSize = "1280x800";
+        Configuration.timeout = 10000;
     }
 
     @BeforeEach
@@ -19,7 +26,20 @@ public class ProductPageTest {
     }
 
     @Test
-    public void search() throws InterruptedException {
-        Thread.sleep(1_000);
+    @DisplayName("Проверка основных элементов карточки товара")
+    public void testProductCardElements() {
+        // Проверяем основные элементы карточки товара
+        $(".MarketItemCard__itemName").shouldBe(visible).shouldHave(text("Перо"));
+        $(".MarketItemCard__itemPrice").shouldBe(visible);
+        $(".MarketItemCard__itemDescription").shouldBe(visible);
+        $(".MarketItemCard__itemImg").shouldBe(visible);
+        $(".MarketItemCard__btnWrap").shouldBe(visible);
+    }
+
+    @Test
+    @DisplayName("Проверка кнопки 'Написать'")
+    public void testWriteButton() {
+        $(".MarketItemCard__btnWrap").shouldBe(visible).click();
+        $(".WriteButton__writeBox").shouldBe(visible);
     }
 }
